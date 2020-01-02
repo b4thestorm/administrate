@@ -12,28 +12,74 @@ project codebases, issue trackers, chat-rooms, and mailing lists.
 
 ## Getting Started
 
-TBD
+Administrate is a Rails Engine, but ships with everything needed to contribute 
+and test new changes.
 
-## Issue Triage
+To maintain compatibility with multiple dependency versions, we use
+[Appraisal][].
 
-TBD
+[Appraisal]: https://github.com/thoughtbot/appraisal
 
-## Releasing
+### Opening a PR
 
-New releases (and the time period between them) is arbitrary, but usually
-motivated by a new Rails release or enough bug fixes and/or features that
-there's significant enough changes.
+1. Fork the repo,
+2. Run `./bin/setup` to install the base dependencies and setup a local 
+   database,
+3. Run the test suite: `bundle exec rspec && bundle exec appraisal rspec`,
+4. Make your changes,
+5. Push your fork and open a pull request.
 
-A new release involves cutting and pushing a new version to [Ruby Gems][] and
-then deploying that version of the example application and documentation. This
-means that [the demo application][demo] always matches the current release,
-whilst [the pre-release application][pre-release] can track current `master`.
+### Running the application locally
 
-[Ruby Gems]: https://rubygems.org/gems/administrate
-[demo]: https://administrate-demo.herokuapp.com/
-[pre-release]: https://administrate-demo-prerelease.herokuapp.com/
+Administrate's demo application can be run like any Rails application:
 
-## Label Taxonomy
+```sh
+bundle exec rails s
+```
+
+This will start the application defined in `spec/example_app`.
+
+## Repository Structure
+
+This repository contains both the source code for Administrate,
+and a demo Rails app that uses Administrate.
+The demo app is [hosted publicly on Heroku][demo].
+
+- The gem's source code lives in the `app` and `lib` subdirectories.
+- The demo app is nested within `spec/example_app`.
+- The guides as seen at
+  [https://administrate-prototype.herokuapp.com][prototype_heroku] live as
+  markdown files in the `docs` subdirectory.
+
+Rails configuration files have been changed
+to recognize the app in the new location,
+so running the server or deploying to Heroku works normally.
+
+With this structure, developing a typical feature looks like:
+
+- Add tests in `spec/`
+- Implement a feature in `administrate/`
+- Exercise the feature using the demo rails app (`spec/example_app/app/`)
+
+## Front-end Architecture
+
+This project uses:
+
+- Sass
+- [BEM]-style CSS selectors, with [namespaces]
+- Autoprefixer
+- SCSS-Lint, with [Hound] ([configuration](.scss-lint.yml))
+- A variety of CSS units:
+  - `em` for typographical-related elements
+  - `rem` for lengths related to components
+  - `px` for borders, text shadows, etc.
+  - `vw`/`vh` for lengths that should be relational to the viewport
+
+[BEM]: http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
+[namespaces]: http://csswizardry.com/2015/03/more-transparent-ui-code-with-namespaces/
+[Hound]: https://houndci.com/
+
+## Labels
 
 Issues and PRs are split into two levels of labels, at the higher level:
 
@@ -64,3 +110,18 @@ For security inquiries or vulnerability reports, please email
 If you'd like, you can use our [PGP key] when reporting vulnerabilities.
 
 [PGP key]: https://thoughtbot.com/thoughtbot.asc
+
+## Releasing
+
+New releases (and the time period between them) is arbitrary, but usually
+motivated by a new Rails release or enough bug fixes and/or features that
+there's significant enough changes.
+
+A new release involves cutting and pushing a new version to [Ruby Gems][] and
+then deploying that version of the example application and documentation. This
+means that [the demo application][demo] always matches the current release,
+whilst [the pre-release application][pre-release] can track current `master`.
+
+[Ruby Gems]: https://rubygems.org/gems/administrate
+[demo]: https://administrate-demo.herokuapp.com/
+[pre-release]: https://administrate-demo-prerelease.herokuapp.com/
